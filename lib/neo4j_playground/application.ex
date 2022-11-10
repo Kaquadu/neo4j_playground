@@ -6,8 +6,10 @@ defmodule Neo4jPlayground.Application do
   use Application
 
   def start(_type, _args) do
-    children = []
+    children = [
+      Neo4jPlayground.Neo4j.Connection
+    ]
 
-    Supervisor.start_link(children, strategy: :one_for_one, name: JogaGo.Supervisor)
+    Supervisor.start_link(children, strategy: :one_for_one, name: Neo4jPlayground.Supervisor)
   end
 end
