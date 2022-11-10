@@ -1,7 +1,7 @@
 defmodule Neo4jPlayground.Suppliers.Supplier do
   use Neo4jPlayground.Schema
 
-  @cast_fiels ~w(name country city zip_code street number)a
+  @cast_fields ~w(name country city zip_code street number)a
   @required_fields ~w(name country)a
 
   schema "suppliers" do

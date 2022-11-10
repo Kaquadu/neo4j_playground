@@ -1,6 +1,8 @@
 defmodule Neo4jPlayground.Neo4j.Connection do
   use GenServer
 
+  require Logger
+
   @impl true
   def init(_params) do
     neo4j_opts = Application.get_env(:bolt_sips, Bolt)
@@ -18,9 +20,5 @@ defmodule Neo4jPlayground.Neo4j.Connection do
 
   def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
-  end
-
-  def get_connection() do
-    GenServer.call(__MODULE__, :get_conn)
   end
 end

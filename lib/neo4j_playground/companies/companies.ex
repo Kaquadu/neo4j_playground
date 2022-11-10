@@ -1,2 +1,33 @@
 defmodule Neo4jPlayground.Companies do
+  alias Neo4jPlayground.Companies.Company
+
+  @neo_repo Bolt.Sips
+
+  def create(params) do
+    case Company.changeset(%Company{}, params) do
+      %{valid?: true} = cs ->
+        query = "CREATE (company:Company #{build_company_params!(cs)}) RETURN company"
+        {:ok, @neo_repo.query!(@neo_repo.conn, query)}
+
+      _invalid = cs ->
+        {:error, cs}
+    end
+  end
+
+  def delete_all() do
+    @neo_repo.query!(@neo_repo.conn, "MATCH (companies:Company) DELETE (companies)")
+  end
+
+  ###
+
+  defp build_company_params!(%{changes: changes} = _cs) do
+    raw_params =
+      changes
+      |> Enum.reduce("", fn {k, v}, acc ->
+        acc <> "#{k}: '#{v}', "
+      end)
+      |> String.replace_suffix(", ", "")
+
+    "{#{raw_params}}"
+  end
 end
