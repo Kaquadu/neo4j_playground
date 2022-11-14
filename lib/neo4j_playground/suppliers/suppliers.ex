@@ -2,8 +2,6 @@ defmodule Neo4jPlayground.Suppliers do
   alias Neo4jPlayground.Neo4jAdapter
   alias Neo4jPlayground.Suppliers.Supplier
 
-  @neo_repo Bolt.Sips
-
   def create(params) do
     case Supplier.changeset(%Supplier{}, params) do
       %{valid?: true} = cs ->
@@ -37,7 +35,7 @@ defmodule Neo4jPlayground.Suppliers do
 
   # for testing purposes
   def delete_all() do
-    @neo_repo.query!(@neo_repo.conn, "MATCH (suppliers:Supplier) DELETE (suppliers)")
+    Neo4jAdapter.run_query("MATCH (suppliers:Supplier) DELETE (suppliers)")
   end
 
   ###
