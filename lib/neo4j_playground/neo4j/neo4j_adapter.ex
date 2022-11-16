@@ -3,7 +3,9 @@ defmodule Neo4jPlayground.Neo4jAdapter do
 
   def run_query(query) do
     try do
-      {:ok, @neo_repo.query!(@neo_repo.conn, query)}
+      %{records: records} = @neo_repo.query!(@neo_repo.conn, query)
+
+      {:ok, records}
     rescue
       e in Bolt.Sips.Exception ->
         {:error, e.message}

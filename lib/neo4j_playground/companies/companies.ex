@@ -16,7 +16,7 @@ defmodule Neo4jPlayground.Companies do
 
   # for testing purposes
   def delete_all() do
-    Neo4jAdapter.run_query("MATCH (companies:Company) DELETE (companies)")
+    Neo4jAdapter.run_query("MATCH (companies:Company) DETACH DELETE (companies)")
   end
 
   ###

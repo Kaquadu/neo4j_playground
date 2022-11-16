@@ -2,6 +2,14 @@ defmodule Neo4jPlayground.Suppliers do
   alias Neo4jPlayground.Neo4jAdapter
   alias Neo4jPlayground.Suppliers.Supplier
 
+  def get_suppliers() do
+    query = """
+      MATCH (suppliers:Supplier) RETURN suppliers
+    """
+
+    Neo4jAdapter.run_query(query)
+  end
+
   def create(params) do
     case Supplier.changeset(%Supplier{}, params) do
       %{valid?: true} = cs ->
@@ -14,18 +22,12 @@ defmodule Neo4jPlayground.Suppliers do
     end
   end
 
-  def create_supplies_to(from_supplier, destination, type) do
-    destination_type =
-      case type do
-        :supplier -> "Supplier"
-        :company -> "Company"
-      end
-
+  def create_supplies_to(from_name, destination_name) do
     query = """
       MATCH
-        (from:Supplier),
-        (to:#{destination_type})
-      WHERE from.name = '#{from_supplier}' AND to.name = '#{destination}'
+        (from),
+        (to)
+      WHERE from.name = '#{from_name}' AND to.name = '#{destination_name}'
       CREATE (from)-[supplies_to:SUPPLIES_TO]->(to)
       RETURN supplies_to
     """
@@ -35,7 +37,7 @@ defmodule Neo4jPlayground.Suppliers do
 
   # for testing purposes
   def delete_all() do
-    Neo4jAdapter.run_query("MATCH (suppliers:Supplier) DELETE (suppliers)")
+    Neo4jAdapter.run_query("MATCH (suppliers:Supplier) DETACH DELETE (suppliers)")
   end
 
   ###
